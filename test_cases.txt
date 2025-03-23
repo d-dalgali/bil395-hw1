@@ -1,0 +1,45 @@
+# Simple arithmetic expressions
+3+5
+10*4
+7-2
+8/2
+
+# Expressions with parentheses
+(1+2)*4
+(6-3)*(2+1)
+(10/2)+(4*1)
+
+# More complex expressions
+(3+5)*(2-1)/4
+((2+3)*2)-(4/(1+1))
+(2+(3*(4-1)))/5
+
+# Floating-point expressions
+3.5+2.1
+2.0*3.75
+(1.5+2.5)*2
+
+# Exponentiation (^) and (**)
+2^3
+7**2
+(2+1)^2
+(1.5+1.5)**2
+((3+5)*(2-1)/4)**2
+(1/2)*-1
+
+# Division by zero cases
+10/0
+5/(3-3)
+(4+1)/(2-2)
+
+
+# Edge case: just a number
+7
+
+# Edge case: invalid character
+3 & 5
+1 , 2
+
+# Edge case: unmatched parentheses
+(1+2
+(3+4)) * 2
