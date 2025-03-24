@@ -1,22 +1,40 @@
 # Lex & Yacc Hesap Makinesi
 
-## Proje Özeti
+## 🔍 Proje Özeti
 
-Bu projede, Lex ve Yacc kullanılarak ondalıklı sayı ve üstel işlem destekleyen bir hesap makinesi geliştirilmiştir. Program, kullanıcıdan alınan aritmetik ifadeleri tokenize edip gramer kurallarına göre yorumlayarak sonucu hesaplar. Çalışma sırasında hata yönetimi ve öncelik kuralları dikkate alınmıştır.
+Bu projede, Lex ve Yacc kullanılarak hem **ondalıklı sayı** hem de **üs alma** destekleyen bir hesap makinesi geliştirildi. Kullanıcıdan alınan aritmetik ifadeler Lex ile tokenize edilir, Yacc ile gramer kurallarına göre ayrıştırılır ve sonuç hesaplanır.  
+Proje, temel işlemlere ek olarak hata yönetimi, operatör önceliği ve bonus destekleriyle kapsamlı hale getirilmiştir.
 
 ---
 
-## Tasarım Kararları
+## ⚙️ Tasarım Kararları
 
-- **FLOAT Desteği:** Sayılar `double` tipiyle temsil edilmiştir. Lex'te `atof()` ile dönüştürülüp `yylval.val`'e atanır. Bu sayede ondalıklı işlemler desteklenir.
-- **Üstel İşlem (^) ve (**):** `^` ve `**`operatörleri`EXP`token'ı olarak tanımlanmıştır.`pow($1, $3)` fonksiyonu kullanılarak hesaplama yapılır.
-- **Unary Minus (eksi üsler):** Negatif üsler ve `-5` gibi ifadeler için `-expr` kuralı `%prec UMINUS` ile tanımlanarak desteklenmiştir.
-- **Operatör Önceliği:** Yacc’te `%left`, `%right` ve `%precedence` direktifleri ile matematiksel öncelik kuralları doğru şekilde uygulanmıştır.
-- **Hata Yönetimi:**
-  - `10 / 0` gibi ifadelerde özel kontrol ile `"Sıfıra bölme hatası!"` mesajı verilir.
-  - Geçersiz karakterler Lex'te yakalanır (`Geçersiz karakter: &`)
-  - Parantez veya yapı hatalarında tek satırlık `"Hata: Geçersiz ifade!"` mesajı gösterilir.
-  - Her hata programı durdurmadan geçerli bir şekilde işlemeye devam eder.
+### 🔹 Tokenizasyon (Lex)
+
+- **NUMBER:** Hem tam sayılar hem de ondalıklı sayılar desteklenir. `atof(yytext)` ile `yylval.val` atanır.
+- **Operatörler ve Parantezler:** `+`, `-`, `*`, `/`, `^`, `**`, `(`, `)` gibi operatörler ayrı token'lar olarak tanımlanmıştır.
+- **Boşluk Yönetimi:** Boşluk ve tab karakterleri göz ardı edilmiştir
+- **Hatalı Karakterler:** Tanınmayan karakterler için `Geçersiz karakter: X` mesajı basılır.
+
+### 🔹 Gramer Kuralları (Yacc)
+
+- **Temel işlemler:** `expr + expr`, `expr - expr`, `expr * expr`, `expr / expr`, `( expr )`, `NUMBER` gramerine göre tanımlanmıştır.
+- **Üstel işlem:** `^` ve `**` operatörleri `EXP` token'ına karşılık gelir. `pow($1, $3)` ile hesaplanır.
+- **Unary minus:** `-5`, `2**-2` gibi ifadeler desteklenir. `%prec UMINUS` öncelik tanımıyla sağlanmıştır.
+- **Operatör Önceliği:**
+  - `%left PLUS MINUS`
+  - `%left TIMES DIVIDE`
+  - `%right EXP`
+  - `%precedence UMINUS`
+    ile öncelik sırası netleştirilmiştir.
+- **Ambiguous grammar çözümü:** Grammar değiştirilmemiştir, ancak `%left`, `%right`, `%prec` ile yönlendirme sağlanmıştır
+
+### 🔹 Hata Yönetimi
+
+- **Sıfıra bölme:** `10 / 0` gibi durumlarda özel kontrolle `"Hata: Sıfıra bölme hatası!"` mesajı basılır.
+- **Yapı hataları:** Eksik parantez veya yanlış yapı için `"Hata: Geçersiz ifade!"` basılır.
+- **Geçersiz karakterler:** Lex seviyesi hatalar, kullanıcıya açıkça belirtilir.
+- **Program durmaz:** Her hatada işlem devam eder, sonraki ifadeler çalıştırılır.
 
 ---
 
