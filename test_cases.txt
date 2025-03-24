@@ -43,3 +43,13 @@
 # Edge case: unmatched parentheses
 (1+2
 (3+4)) * 2
+
+# Zero divided by number
+0 / 10
+
+# Exponentiation chain
+(2^3)^2
+
+# Exponentiation precedence
+2 * 3 ^ 2
+2 ^ 3 + 1
